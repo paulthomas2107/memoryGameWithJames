@@ -1,4 +1,7 @@
+const log = console.log;
+
 const pokeAPIBaseURL = 'https://pokeapi.co/api/v2/pokemon/';
+const game = document.getElementById('game')
 
 const loadPokemom = async () => {
   const randomIds = new Set();
@@ -8,14 +11,33 @@ const loadPokemom = async () => {
     randomIds.add(randomNumber);
   }
 
-  console.log([...randomIds]);
-  const randomIdsArr = [...randomIds]
+  const pokePromises = [...randomIds].map(id => fetch(pokeAPIBaseURL + id))
+  const responses = await Promise.all(pokePromises)
 
-  for (let index = 0; index < randomIdsArr.length; index++) {
-    const res = await fetch(pokeAPIBaseURL + randomIdsArr[index]);
-    const pokemon = await res.json();
-    console.log(pokemon);
-  }
+  return await Promise.all(responses.map(res => res.json()))
 };
 
-loadPokemom();
+
+const displayPokemon = (pokemon) => {
+  pokemon.sort(_ => Math.random() - 0.5)
+  const pokemonHTML = pokemon.map(pokemon => {
+    return `
+    <div class='card'>
+      <h2>${pokemon.name}</h2>
+    </div>
+    `
+  }).join('');
+
+  game.innerHTML = pokemonHTML;
+
+  
+
+}
+
+const resetGame = async () => {
+  const pokemon = await loadPokemom()
+  displayPokemon([...pokemon, ...pokemon])
+
+}
+
+resetGame();
