@@ -33,13 +33,20 @@ header {
 	border-radius: 10px;
 	position: relative;
 	overflow: hidden;
+	transform-style: preserve-3d;
 }
 
 
 .front, .back {
 	height: 100%;
 	width: 100%;
-
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	backface-visibility: hidden;
+	transition: transform 0.5s;
 }
 
 .front {
@@ -47,4 +54,9 @@ header {
 	background-position: center;
 	background-repeat: no-repeat;
 	background-color: black;
+}
+
+.rotated {
+	transform: rotateY(180deg);
+
 }
