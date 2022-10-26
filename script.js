@@ -3,6 +3,24 @@ const log = console.log;
 const pokeAPIBaseURL = 'https://pokeapi.co/api/v2/pokemon/';
 const game = document.getElementById('game')
 
+
+const colors = {
+	fire: '#FDDFDF',
+	grass: '#DEFDE0',
+	electric: '#FCF7DE',
+	water: '#DEF3FD',
+	ground: '#f4e7da',
+	rock: '#d5d5d4',
+	fairy: '#fceaff',
+	poison: '#98d7a5',
+	bug: '#f8d5a3',
+	dragon: '#97b3e6',
+	psychic: '#eaeda1',
+	flying: '#F5F5F5',
+	fighting: '#E6E0D4',
+	normal: '#F5F5F5'
+};
+
 const loadPokemom = async () => {
   const randomIds = new Set();
 
@@ -17,13 +35,23 @@ const loadPokemom = async () => {
   return await Promise.all(responses.map(res => res.json()))
 };
 
+/*
+<div class='front'>
+      </div>
+      */
 
 const displayPokemon = (pokemon) => {
   pokemon.sort(_ => Math.random() - 0.5)
   const pokemonHTML = pokemon.map(pokemon => {
+    const type = pokemon.types[0]?.type?.name || 'normal'
+    const color = colors[type]
     return `
     <div class='card'>
-      <h2>${pokemon.name}</h2>
+      
+      <div class='back rotate' style='background-color: ${color};'>
+         <img src='${pokemon.sprites.front_default}' alt='${pokemon.name}'>
+         <h2>${pokemon.name}</h2>
+      </div>
     </div>
     `
   }).join('');
